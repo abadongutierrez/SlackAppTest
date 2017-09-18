@@ -2,13 +2,14 @@ defmodule SlackTestAppWeb.AuthController do
     use SlackTestAppWeb, :controller
   
   def index(conn, _params) do
+    :hackney_trace.enable(:max, :io)
     redirect conn, external: authorize_url!()
   end
 
-  def callback(conn, %{"state" => provider, "code" => code}) do
+  def callback(conn, %{"state" => state, "code" => code}) do
     client = get_token!(code)
     IO.inspect client, label: "->: "
-    text conn, "Token #{client.token}"
+    text conn, "Token #{client.token.access_token}"
   end
 
   def delete(conn, _params) do
@@ -30,7 +31,7 @@ defmodule SlackTestAppWeb.AuthController do
 
   defp client do
     client = OAuth2.Client.new([
-      strategy: OAuth2.Strategy.AuthCode, #default
+      strategy: OAuth2.Strategy.AuthCode,
       client_id: System.get_env("SLACK_CLIENT_ID"),
       client_secret: System.get_env("SLACK_CLIENT_SECRET"),
       site: "https://slack.com",
