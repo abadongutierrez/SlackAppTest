@@ -31,7 +31,7 @@ defmodule SlackTestAppWeb.AuthController do
   defp get_bot_info(client) do
     bot_access_token = client.token.other_params["bot"]["bot_access_token"]
     response = "https://slack.com/api/bots.info?token=#{bot_access_token}"
-    |> HttpPoison.get
+    |> HTTPoison.get
 
     case response do
       {:ok, %HTTPoison.Response{body: body}} -> body["bot"]["name"]
