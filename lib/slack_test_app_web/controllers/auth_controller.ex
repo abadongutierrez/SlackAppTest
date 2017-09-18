@@ -9,7 +9,7 @@ defmodule SlackTestAppWeb.AuthController do
   def callback(conn, %{"state" => state, "code" => code}) do
     client = get_token!(code)
     IO.inspect client, label: "->: "
-    text conn, "Token #{client.token.access_token}"
+    text conn, "Token [#{client.token.access_token}]"
   end
 
   def delete(conn, _params) do
@@ -25,8 +25,9 @@ defmodule SlackTestAppWeb.AuthController do
   end
 
   defp get_token!(code) do
-    client()
-    |> OAuth2.Client.get_token!(code: code)
+    client = client()
+    client
+    |> OAuth2.Client.get_token!(code: code, client_secret: client.client_secret)
   end
 
   defp client do
