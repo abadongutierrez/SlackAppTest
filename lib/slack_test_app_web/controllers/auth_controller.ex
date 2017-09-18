@@ -7,6 +7,7 @@ defmodule SlackTestAppWeb.AuthController do
 
   def callback(conn, %{"state" => provider, "code" => code}) do
     client = get_token!(code)
+    IO.inspect client, label: "->: "
     text conn, "Token #{client.token}"
   end
 
