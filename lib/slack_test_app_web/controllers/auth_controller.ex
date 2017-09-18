@@ -30,8 +30,8 @@ defmodule SlackTestAppWeb.AuthController do
   defp client do
     client = OAuth2.Client.new([
       strategy: OAuth2.Strategy.AuthCode, #default
-      client_id: "13627763665.235076033200",
-      client_secret: "2b74edbed9d16723665e54b80cc2ac34",
+      client_id: System.get_env("SLACK_CLIENT_ID"),
+      client_secret: System.get_env("SLACK_CLIENT_SECRET"),
       site: "https://slack.com",
       authorize_url: "/oauth/authorize",
       token_url: "/api/oauth.access",
