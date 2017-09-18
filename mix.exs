@@ -42,7 +42,8 @@ defmodule SlackTestApp.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
 
-      {:oauth2, "~> 0.9"}
+      {:oauth2, "~> 0.9"},
+      {:httpoison, "~> 0.13"}
     ]
   end
 
