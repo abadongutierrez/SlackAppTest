@@ -2,14 +2,12 @@ defmodule SlackTestAppWeb.AuthController do
     use SlackTestAppWeb, :controller
   
   def index(conn, _params) do
-    :hackney_trace.enable(:max, :io)
     redirect conn, external: authorize_url!()
   end
 
   def callback(conn, %{"state" => state, "code" => code}) do
     client = get_token!(code)
-    IO.inspect client, label: "->: "
-    text conn, "Token [#{client.token.access_token}]"
+    render conn, "callback.html", bot: get_bot_info(client)
   end
 
   def delete(conn, _params) do
@@ -21,13 +19,23 @@ defmodule SlackTestAppWeb.AuthController do
 
   defp authorize_url! do
     client()
-    |> OAuth2.Client.authorize_url!(scope: "channels:read chat:write:bot im:read im:write users:read users:write", state: "123")
+    |> OAuth2.Client.authorize_url!(scope: "channels:read chat:write:bot im:read im:write users:read users:write bot", state: "123")
   end
 
   defp get_token!(code) do
     client = client()
     client
     |> OAuth2.Client.get_token!(code: code, client_secret: client.client_secret)
+  end
+
+  defp get_bot_info(client) do
+    response = "https://slack.com/api/bots.info?token=#{client.token.bot.bot_access_token}"
+    |> HttpPoison.get
+
+    case response do
+      {:ok, %HTTPoison.Response{body: body}} -> body["bot"]["name"]
+      {:error, _} -> "Error"
+    end
   end
 
   defp client do

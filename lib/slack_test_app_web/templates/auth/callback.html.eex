@@ -1,0 +1,2 @@
+<h1>Back</h1>
+<div><%= @bot %></div>
