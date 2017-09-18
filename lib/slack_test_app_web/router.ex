@@ -19,6 +19,13 @@ defmodule SlackTestAppWeb.Router do
     get "/", PageController, :index
   end
 
+  scope "/auth", SlackTestAppWeb do
+    pipe_through :browser
+  
+    get "/", AuthController, :index
+    get "/callback", AuthController, :callback
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", SlackTestAppWeb do
   #   pipe_through :api
