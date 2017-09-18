@@ -19,7 +19,7 @@ defmodule SlackTestAppWeb.AuthController do
 
   defp authorize_url! do
     client()
-    |> OAuth2.Client.authorize_url!(scope: "channels:read chat:write:bot im:read im:write users:read users:write bot", state: "123")
+    |> OAuth2.Client.authorize_url!(scope: "channels:read chat:write:bot im:read im:write users:read users:write bot identity.basic", state: "123")
   end
 
   defp get_token!(code) do
